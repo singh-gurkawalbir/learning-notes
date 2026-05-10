@@ -1,16 +1,18 @@
 ---
 title: "Mixpanel vs Sentry vs Datadog: three different observability questions"
 slug: "mixpanel-sentry-datadog-explained"
+type: "concept"
 tags: ["observability", "analytics", "monitoring", "sentry", "datadog", "mixpanel", "apm"]
 summary: "Three monitoring tools answering three different questions about a running product — what users did, what broke, and whether the system is healthy."
 created: 2026-05-05
-updated: 2026-05-05
+updated: 2026-05-10
 source_question: "What are Mixpanel, Sentry, and Datadog — how do they work and what's the difference, with real-world examples I can use in conversation?"
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-05-05
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-05-10"
+  next_review: 2026-05-11
+  step: 1
+  confidence: 1
 quiz:
   - q: "Your PM asks: 'What % of users who viewed the pricing page completed a subscription?' Which of the three tools is the right one to answer this, and why not the other two?"
     a: "Mixpanel (or any product analytics tool — Amplitude, Databricks). Sentry only knows about errors so it can't tell you about successful flows. Datadog can show API latencies for those endpoints but doesn't natively model funnels with retention/cohort math. Mixpanel's funnel feature is built exactly for sequenced-event drop-off analysis."
