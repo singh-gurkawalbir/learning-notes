@@ -10,9 +10,9 @@ source_question: "How does the gesture handling work in this React Native carous
 links:
 review:
   last_reviewed: "2026-05-10"
-  next_review: 2026-05-11
-  step: 1
-  confidence: 1
+  next_review: 2026-05-13
+  step: 2
+  confidence: 2
 quiz:
   - q: "Why does calling `setCurrentIndex(target)` directly inside an `onEnd` worklet crash the app, and what's the correct way to do it?"
     a: "The worklet runs on the UI thread, which doesn't have access to React's setState mechanism — that lives on the JS thread. Calling setState directly tries to invoke a JS function from a context that doesn't have it. The correct pattern is `runOnJS(setCurrentIndex)(target)` which marshals the call across the bridge. By design this is the *only* bridge crossing in the whole gesture lifecycle, on lift, never per-frame."
