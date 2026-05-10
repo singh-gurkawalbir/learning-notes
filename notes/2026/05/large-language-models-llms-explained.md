@@ -117,3 +117,16 @@ The video mentions that a 1GB text file contains about 178 million words, and a 
 - 3:23 — Training process: iterative word prediction
 - 4:03 — Fine-tuning for specific tasks
 - 4:23 — Business applications of LLMs
+
+## Follow-up — 2026-05-10
+
+**Q:** Explain a bit more
+
+The core innovation that allows LLMs to "learn the intricate patterns, grammar, context, and relationships between words" (from your mental model) is the **Transformer's "attention" mechanism**.
+
+Instead of processing words one by one like older neural networks, attention allows the model to look at *all* words in a sentence simultaneously. For each word, it calculates how much "attention" it should pay to every other word in that sentence to understand its meaning.
+
+Consider the sentence: "The **bank** was flooded after the heavy rain."
+When the LLM processes the word "**bank**," its attention mechanism would heavily weigh words like "flooded" and "rain," helping it understand that "bank" refers to a riverbank, not a financial institution.
+
+This simultaneous, weighted analysis of relationships between words, regardless of their position, is why Transformers excel at "contextual understanding" and can generate far more coherent and nuanced text than previous architectures.
