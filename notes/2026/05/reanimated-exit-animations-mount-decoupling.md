@@ -1,16 +1,18 @@
 ---
 title: "Reanimated exit animations: decoupling mount from animation state"
 slug: "reanimated-exit-animations-mount-decoupling"
+type: "concept"
 tags: ["react-native", "reanimated", "animations", "lifecycle", "ui-thread"]
 summary: "Why Reanimated's auto exiting animations sometimes get cut short, and the shared-value pattern that takes manual control over the fade-then-unmount lifecycle."
 created: 2026-05-08
-updated: 2026-05-08
+updated: 2026-05-10
 source_question: "Why does my Reanimated exit animation get cut short, and how do I make a fade-out play through its full duration before unmount?"
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-05-08
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-05-10"
+  next_review: 2026-05-11
+  step: 1
+  confidence: 1
 quiz:
   - q: "A child Animated.View has `exiting={FadeOut.duration(200)}`. Logs show React unmounts the component ~119ms after the trigger, not ~200ms. What's the most likely cause?"
     a: "The parent component is also unmounting (or destabilising) at the same moment, so Reanimated can't keep the native view alive for the full exit duration. Either stabilise the parent (always render the slot, conditionally render only the child) or take manual control via shared values."
