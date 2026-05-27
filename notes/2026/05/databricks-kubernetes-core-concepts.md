@@ -38,3 +38,9 @@ graph TD
 The **Kubernetes Pod** provides the fundamental building block for running containerized applications, ensuring isolation and resource management for individual services. While a **Databricks SQL Warehouse** is a high-level, specialized compute resource for SQL analytics, the underlying infrastructure that powers it often leverages principles similar to Kubernetes.
 
 Specifically, when a SQL Warehouse auto-scales to handle query load, Databricks' control plane provisions and orchestrates compute instances (which could be
+
+## Follow-up — 2026-05-27
+
+**Q:** Continue
+
+...orchestrates compute instances (which could be virtual machines or containers) in a manner conceptually similar to how Kubernetes manages Pods. That is, Databricks' internal systems handle the provisioning, scaling, and lifecycle management of these compute resources, ensuring they have the necessary CPU, memory, and network to execute SQL queries. While you don't directly interact with Pods when using a SQL Warehouse, the underlying platform employs sophisticated orchestration techniques to achieve the auto-scaling and reliability you experience.
