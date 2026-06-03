@@ -38,3 +38,121 @@ Redux itself is generally not a direct source of memory leaks because it's a pre
 Zustand's `useStore` hook automatically handles subscriptions and unsubscriptions, so direct leaks from the hook are rare. However, similar to Redux:
 *   **Manual `store.subscribe()` without cleanup:** If you use `store.subscribe()` directly to listen for state changes, you must call the returned unsubscribe function when the listener is no longer needed (e.g., in a `useEffect` cleanup).
 *   **Retained large state:** Storing extensive, immutable data in the Zustand store that is no longer relevant can lead to increased memory usage over time if not properly managed.
+
+## Follow-up — 2026-06-03
+
+**Q:** Explain with examples
+
+You're asking for concrete examples of the memory leak scenarios described.
+
+### React Leaks
+
+1.  **Unsubscribed event listeners:**
+    *   **Leak:**
+        ```javascript
+        import { useEffect } from 'react';
+        function MyComponent() {
+          useEffect(() => {
+            // Adds listener, but never removes it
+            window.addEventListener('resize', () => console.log('Resized!'));
+          }, []); // Effect runs once
+          return <div>...</div>;
+        }
+        ```
+        When `MyComponent` unmounts, the closure for the event listener (which includes `MyComponent`'s scope) persists, preventing garbage collection.
+    *   **Fix:**
+        ```javascript
+        useEffect(() => {
+          const handleResize = () => console.log('Resized!');
+          window.addEventListener('resize', handleResize);
+          return () => { // Cleanup function
+            window.removeEventListener('resize', handleResize);
+          };
+        }, []);
+        ```
+
+2.  **Uncleared timers:**
+    *   **Leak:**
+        ```javascript
+        import { useEffect, useState } from 'react';
+        function TimerComponent() {
+          const [count, setCount] = useState(0);
+          useEffect(() => {
+            // Sets timer, but never clears it
+            setInterval(() => setCount(c => c + 1), 1000);
+          }, []);
+          return <div>Count: {count}</div>;
+        }
+        ```
+        If `TimerComponent` unmounts, the `setInterval` continues to run, attempting to update state on a non-existent component.
+    *   **Fix:**
+        ```javascript
+        useEffect(() => {
+          const intervalId = setInterval(() => setCount(c => c + 1), 1000);
+          return () => { // Cleanup function
+            clearInterval(intervalId);
+          };
+        }, []);
+        ```
+
+### Redux Leaks
+
+1.  **Forgotten `store.subscribe()` cleanup:**
+    *   **Leak:**
+        ```javascript
+        import { useEffect } from 'react';
+        import store from './reduxStore'; // Your Redux store
+        function ManualReduxListener() {
+          useEffect(() => {
+            // Subscribes, but doesn't unsubscribe
+            store.subscribe(() => {
+              console.log('Redux state changed!', store.getState());
+            });
+          }, []);
+          return <div>...</div>;
+        }
+        ```
+        The listener function is held by the Redux store, preventing its garbage collection (and the component's closure) even after `ManualReduxListener` unmounts.
+    *   **Fix:**
+        ```javascript
+        useEffect(() => {
+          const unsubscribe = store.subscribe(() => {
+            console.log('Redux state changed!', store.getState());
+          });
+          return () => { // Cleanup function
+            unsubscribe();
+          };
+        }, []);
+        ```
+
+### Zustand Leaks
+
+1.  **Manual `store.subscribe()` without cleanup:**
+    *   **Leak:**
+        ```javascript
+        import { useEffect } from 'react';
+        import { myZustandStore } from './zustandStore'; // Your Zustand store
+        function ManualZustandListener() {
+          useEffect(() => {
+            // Subscribes, but doesn't unsubscribe
+            myZustandStore.subscribe(
+              (state) => console.log('Zustand state changed:', state),
+              (state) => state.someValue // Selector
+            );
+          }, []);
+          return <div>...</div>;
+        }
+        ```
+        Similar to Redux, the listener function remains active in the Zustand store's subscription list after the component unmounts.
+    *   **Fix:**
+        ```javascript
+        useEffect(() => {
+          const unsubscribe = myZustandStore.subscribe(
+            (state) => console.log('Zustand state changed:', state),
+            (state) => state.someValue
+          );
+          return () => { // Cleanup function
+            unsubscribe();
+          };
+        }, []);
+        ```
