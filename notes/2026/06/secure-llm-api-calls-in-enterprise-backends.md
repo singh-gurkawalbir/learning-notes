@@ -6,7 +6,7 @@ tags: ["llm", "api-security", "secrets-management", "backend", "enterprise-archi
 summary: "Backends act as secure intermediaries for LLM API calls, managing secrets and routing requests through enterprise infrastructure for security and compliance."
 created: 2026-06-11
 updated: 2026-06-11
-source_question: "How does api calls, secrets, tokens work in backend when doing calls to an llm, \nI hear a lot in my team mentioning that they have to follow standards as the api goes through certain channels in an MNC, like sec ops, ha proxy etc. what might they be and what is their need"
+source_question: "How does api calls, secrets, tokens work in backend when doing calls to an llm, \\nI hear a lot in my team mentioning that they have to follow standards as the api goes through certain channels in an MNC, like sec ops, ha proxy etc. what might they be and what is their need"
 links:
   - slug: "authentication-tokens-bearer-tokens-and-sso"
     relation: "related"
@@ -242,3 +242,15 @@ If the `SecretStore` were to experience an outage or become inaccessible to the 
 - **Related:** [[frontend-architecture-patterns-tradeoffs]] — Discusses patterns where a backend acts as a gateway or BFF, which is precisely the role it plays here for LLM interaction.
 - **Related:** [[mixpanel-sentry-datadog-explained]] — Observability tools mentioned are crucial for monitoring the health and security of these LLM API interactions and infrastructure components.
 - **Background:** [[large-language-models-llms-explained]] — Provides foundational knowledge about LLMs, which are the external services being integrated.
+
+## Follow-up — 2026-06-11
+
+**Q:** There is a ticket generated for fronted too where they showed a ticket which was related to yarnrc.yml file which contained an npm authtoken, should it have been there or not? What is the solution
+
+No, an `npm authtoken` should generally not be committed to `yarnrc.yml` in a frontend project.
+
+This is a "Security Vulnerability" (as discussed in "Example 2 — wrong-but-tempting") because `yarnrc.yml` is typically part of the source code repository. If committed, the token becomes exposed to anyone with access to the codebase, and potentially even in deployed client bundles if not handled carefully. An `npm authtoken` is used to authenticate with private npm registries during *build time* (e.g., when `yarn install` runs), not for any client-side runtime operations.
+
+The solution aligns with the "Secret Retrieval" principle from the note:
+1.  **Remove the token** from `yarnrc.yml` and, if it was committed, remove it from version control history.
+2.  **Inject it securely** as an environment variable (e.g., `NPM_TOKEN`) during build processes. For local development, developers can set this variable in their shell. In CI/CD pipelines, this token should be stored in a secure `SecretStore` (like those mentioned for LLM keys, but often integrated with CI/CD systems) and injected into the build environment only when needed, never hardcoded or committed.
