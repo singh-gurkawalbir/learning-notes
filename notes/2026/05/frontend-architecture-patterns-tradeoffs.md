@@ -5,14 +5,14 @@ type: "concept"
 tags: ["frontend-architecture", "ssr", "spa", "microfrontends", "bff", "system-design"]
 summary: "How MVC, SPA, BFF, SSG/ISR/SSR, monolith, and microfrontends differ along two axes — where HTML is rendered and how the codebase is owned — and when each is correct."
 created: 2026-05-27
-updated: 2026-05-27
+updated: 2026-08-15
 source_question: "What should a senior engineer (6+ YOE) actually know about these six frontend architecture patterns and how they differ?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-05-27
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "A marketing site built as a client-side React SPA ranks poorly on Google despite good content. What is the architectural root cause, and what is the standard fix?"
     a: "A pure SPA ships an near-empty HTML shell; content is painted by JS after hydration. Crawlers that don't execute JS (or budget-limit it) see nothing, and Core Web Vitals (LCP) suffer from the JS round-trip. Fix: move to SSR/SSG (Next.js, etc.) so the server returns fully-rendered HTML on first byte, then hydrate. The render location, not the framework, is the lever."
