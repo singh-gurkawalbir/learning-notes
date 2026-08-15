@@ -5,14 +5,14 @@ type: "concept"
 tags: ["react-native", "gestures", "react-native-gesture-handler", "scrollview", "touch-handling"]
 summary: "React Native has two mutually-blind gesture systems; nesting a gesture-handler ScrollView under an RN Pressable kills swipe."
 created: 2026-06-15
-updated: 2026-06-15
+updated: 2026-08-15
 source_question: "Why doesn't my horizontal image carousel swipe when it's nested inside a tappable list card?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-06-15
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "A horizontal gesture-handler ScrollView nested inside a react-native Pressable receives onTouchStart but never fires onScrollBeginDrag. Tap still works. What is happening and why?"
     a: "The RN Pressable (JS responder system) claims the touch as a press on touch-down. The GH ScrollView lives in gesture-handler's separate native gesture system, which doesn't negotiate with the JS responder, so its pan is never granted activation. Touch reaches the ScrollView (touchStart bubbles) but the pan can't win, so no scroll begins."
