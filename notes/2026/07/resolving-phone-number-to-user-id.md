@@ -5,14 +5,14 @@ type: "concept"
 tags: ["identity-resolution", "observability", "pii", "dynamodb-gsi", "debugging-method"]
 summary: "Why a phone number rarely maps to an internal user ID directly, and how to find the one system that actually indexes it."
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-08-15
 source_question: "Starting from just a phone number, can I find the user's internal ID and app version?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-07-27
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "New Relic returns rows for userId='31' but nothing for userId='824045' — same human. Why?"
     a: "Two id-spaces. The observability sink is keyed on the sendbird/internal id (~5-43k), which the app sets via setUserId. 824045 is the Swiggy-side customer id (~821k-957k), a different namespace that never reaches NR. Wrong space → zero rows, which looks deceptively like 'no data'."
