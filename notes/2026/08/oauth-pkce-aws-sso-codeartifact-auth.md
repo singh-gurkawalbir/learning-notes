@@ -5,14 +5,14 @@ type: "concept"
 tags: ["oauth", "pkce", "aws-sso", "codeartifact", "npm-auth", "monorepo"]
 summary: "How AWS SSO uses OAuth PKCE to mint a token, and how that token cascades into CodeArtifact npm auth and monorepo build targets."
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-15
 source_question: "How does `aws sso login` actually work, what does it store in ~/.aws/sso/cache, and how do `make create-npmrc` and `make android` use it?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-08-12
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "Why does killing `aws sso login` mid-browser break the login even if the browser completes the redirect?"
     a: "The PKCE verifier and the local HTTP callback server both live only in the CLI process's memory. When the CLI dies: (1) port 51667 closes so the browser redirect hits nothing, (2) even if the code were captured somehow, the verifier is gone — and without it the code alone cannot be exchanged for a token. That's the whole point of PKCE."
