@@ -5,14 +5,14 @@ type: "concept"
 tags: ["react-native", "layout", "android", "edge-to-edge", "dimensions-api"]
 summary: "Three RN dimension sources answer three different questions; mismatches cause layout bugs on Android edge-to-edge."
 created: 2026-06-16
-updated: 2026-06-16
+updated: 2026-08-15
 source_question: "Why didn't useWindowDimensions work for sizing slides on Android 11 edge-to-edge, and why did Dimensions.get('screen') / onLayout fix it?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-06-16
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "A carousel slide inside a flex:1 container is sized off useWindowDimensions().height. On a device where window reports 360x764 but the View tree actually renders at 360x800 (full physical screen), what visual bug appears and how big is it?"
     a: "The next slide peeks at the bottom of the current slide by 36 pixels — exactly the difference (800 − 764). Slide 0 fills y=[0, 764]; the container clips at y=800; the 36px gap reveals the top of slide 1. Peek size always equals the status bar height because that is the amount by which window is short of the rendered container."
