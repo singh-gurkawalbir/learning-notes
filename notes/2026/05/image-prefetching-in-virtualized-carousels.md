@@ -5,14 +5,14 @@ type: "concept"
 tags: ["react-native", "expo-image", "image-loading", "prefetching", "carousel", "virtualization"]
 summary: "Lazy image downloads inside virtualizing carousels race with mount/unmount cycles; prefetching at the data layer makes loading deterministic."
 created: 2026-05-17
-updated: 2026-05-17
+updated: 2026-08-15
 source_question: "Why did our image carousel work for months and then suddenly show endless loaders on later banners?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-05-17
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "If the carousel's windowSize is 6 and the journey has 13 banners, why does the 7th banner's loader sometimes never clear even after waiting?"
     a: "The carousel only keeps ~6 items mounted at once. When the user navigates and the window slides, an item that hasn't finished downloading gets unmounted. expo-image 2.4.x cancels in-flight downloads on unmount and discards the partial bytes. When the user returns to that banner, it remounts with isLoading=true, restarts the download from zero — and if the carousel is still cycling or the JS thread is busy processing the bridge backlog, the onLoad event may target an unmounted component instance and be silently dropped. The component's React state never sees isLoading=false, so the loader stays."
