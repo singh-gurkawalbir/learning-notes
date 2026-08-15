@@ -5,14 +5,14 @@ type: "concept"
 tags: ["react-native", "gestures", "reanimated", "gesture-handler", "ui-thread", "worklets"]
 summary: "Why React Native gestures must run on the UI thread, the SharedValue and worklet primitives that enable it, and the single bridge crossing per gesture."
 created: 2026-05-04
-updated: 2026-05-10
+updated: 2026-08-15
 source_question: "How does the gesture handling work in this React Native carousel — what's the architecture and why is it built this way?"
 links:
 review:
-  last_reviewed: "2026-05-10"
-  next_review: 2026-05-13
-  step: 2
-  confidence: 2
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-22
+  step: 3
+  confidence: 3
 quiz:
   - q: "Why does calling `setCurrentIndex(target)` directly inside an `onEnd` worklet crash the app, and what's the correct way to do it?"
     a: "The worklet runs on the UI thread, which doesn't have access to React's setState mechanism — that lives on the JS thread. Calling setState directly tries to invoke a JS function from a context that doesn't have it. The correct pattern is `runOnJS(setCurrentIndex)(target)` which marshals the call across the bridge. By design this is the *only* bridge crossing in the whole gesture lifecycle, on lift, never per-frame."
