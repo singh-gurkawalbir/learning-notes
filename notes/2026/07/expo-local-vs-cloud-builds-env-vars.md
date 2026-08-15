@@ -5,18 +5,18 @@ type: "concept"
 tags: ["expo", "eas-build", "android", "environment-variables", "react-native"]
 summary: "Why EAS builds cannot see gitignored .env files, how APKs are assembled, and how to pass secrets without committing them."
 created: 2026-07-28
-updated: 2026-07-28
+updated: 2026-08-15
 source_question: "How do Expo local, preview and cloud builds actually work, and why was an env var undefined during the build?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-07-28
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "`eas build --local` compiles on your own machine, yet it cannot see your `.env` file. Why not?"
     a: "Because `--local` only changes WHERE compilation runs, not WHAT it builds. EAS still assembles the project through a git copy (eas-cli/build/vcs/clients/git.js clones it, vcs/local.js applies .gitignore and .easignore). `.env` is gitignored, so it is absent from the copied directory that `expo prebuild` actually runs in."
-  - q: "You put `\"EXPO_PUBLIC_GOOGLE_MAPS_API_KEY_ANDROID\": \"$MY_KEY\"` in an eas.json profile's `env` block, expecting substitution. What actually happens?"
+  - q: "You put `\\\"EXPO_PUBLIC_GOOGLE_MAPS_API_KEY_ANDROID\\\": \\\"$MY_KEY\\\"` in an eas.json profile's `env` block, expecting substitution. What actually happens?"
     a: "Nothing is substituted. The schema is `env?: Record<string, string>` with no interpolation, so the key is set to the literal 8-character text `$MY_KEY`. Expo writes that into AndroidManifest.xml, so instead of 'API key not found' you now get an authorization failure — a strictly harder bug to trace, because the tag is present and looks valid."
   - q: "Why could no React error boundary catch the react-native-maps 'API key not found' crash?"
     a: "It is a native java.lang.IllegalStateException thrown from MapView's constructor on the UI thread, triggered by Fabric PRE-ALLOCATING native views ahead of mount. It surfaces as handleHostException and destroys the entire ReactHost. JS sits above the native layer, so it never gets a chance to intercept — the only defence is to never construct the view."
