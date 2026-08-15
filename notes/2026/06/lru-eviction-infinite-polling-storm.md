@@ -5,13 +5,13 @@ type: "incident"
 tags: ["caching", "lru", "polling", "state-management", "react"]
 summary: "An endless API-call cascade caused by deriving a poll-or-stop correctness signal from a memory-bounded LRU cache that evicts live entries."
 created: 2026-06-17
-updated: 2026-06-17
+updated: 2026-08-15
 source_question: "Why did the listing screen keep firing the same API call forever and flicker between loader and results?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-06-17
-  step: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
   confidence: 0
 quiz:
   - q: "The backend returned COMPLETED on every single response, yet the client never stopped calling the API. How is that possible?"
@@ -21,6 +21,7 @@ quiz:
   - q: "Why is 'just raise the LRU cap' not the real fix, and what is the underlying principle?"
     a: "Raising the cap only delays the problem until more screens stack past the new cap — it doesn't address the cause. The underlying flaw is storing a correctness signal (has this finished?) in a store whose job is memory eviction. The fix is to decouple them: keep completion in per-instance state a cache can't touch, and separately stop creating unbounded live consumers."
 ---
+
 **Topic:** Infinite polling storm from evictable-cache correctness signal
 **Tags:** caching, lru, polling, state-management, react
 **Summary:** An endless API-call cascade caused by deriving a poll-or-stop correctness signal from a memory-bounded LRU cache that evicts live entries.
