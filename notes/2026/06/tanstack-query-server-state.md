@@ -5,13 +5,13 @@ type: "concept"
 tags: ["tanstack-query", "react-query", "server-state", "data-fetching", "caching", "react"]
 summary: "TanStack Query manages remote server state — caching, deduping, background refetch and mutations — so you stop hand-rolling loading/error/cache boilerplate."
 created: 2026-06-02
-updated: 2026-06-02
+updated: 2026-08-15
 source_question: "What is TanStack Query and when should I use it over Redux/sagas?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-06-02
-  step: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
   confidence: 0
 quiz:
   - q: "Why is server state fundamentally different from client state, and why does that distinction justify a dedicated library?"
@@ -21,6 +21,7 @@ quiz:
   - q: "After a useMutation succeeds, why call queryClient.invalidateQueries instead of manually setting the new data into state?"
     a: "invalidateQueries marks the affected queries stale and refetches them, so the cache re-syncs with the server's authoritative version — capturing any server-side side effects (computed fields, timestamps, triggers) you couldn't predict locally. Manually setting state assumes your optimistic value equals the server's, which drifts. Optimistic updates are fine for instant UI, but invalidation on settle is what keeps the snapshot honest."
 ---
+
 **Topic:** TanStack Query: server-state management
 **Tags:** tanstack-query, react-query, server-state, data-fetching, caching, react
 **Summary:** TanStack Query manages remote server state — caching, deduping, background refetch and mutations — so you stop hand-rolling loading/error/cache boilerplate.
