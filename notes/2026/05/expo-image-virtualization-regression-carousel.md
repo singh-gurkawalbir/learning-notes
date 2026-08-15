@@ -5,21 +5,21 @@ type: "incident"
 tags: ["react-native", "expo-image", "virtualization", "carousel", "reanimated", "flashlist", "sdwebimage", "ios", "performance"]
 summary: "Post-mortem of a four-layer bug stack where expo-image 2.4.0 broke virtualizing-parent compatibility, plus the carousel-architecture lessons that followed."
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-08-15
 source_question: "Why do images get stuck on shimmer inside virtualizing React Native carousels, and what's the right architecture to avoid it?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-05-20
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "expo-image 2.4.0 removed a single `else if` branch from `didMoveToWindow`. Why does deleting that one branch break every consumer that renders `<Image>` inside FlatList/FlashList/a virtualizing carousel?"
     a: "Virtualization detaches and reattaches the native view as items recycle. `didMoveToWindow(nil)` cancels the in-flight SDWebImage operation; the deleted `else if (!bounds.isEmpty) { reload() }` branch was the only path that re-issued the load on reattach. Without it, the cancelled load is permanently abandoned — and the cancel error is intentionally swallowed (it's `SDWebImageError.cancelled`), so JS sees `LOAD_START` but neither `onLoad` nor `onError` ever fires. The view stays on shimmer forever."
   - q: "Why does the same Discovery Journey screen look fine with 8 banners but jittery with 23, even though the code path is identical?"
     a: "Linear scaling with item count points at memory/compositor pressure, not a code bug. With `renderToHardwareTextureAndroid` on every slide, 23 full-screen items at 3x retina = ~290 MB of GPU video memory. The compositor starts evicting and re-uploading textures, causing visible jitter during translation. Fix: drop per-slide hardware texturing (let the OS composite normally), or use windowing to mount only ~7 slides at a time. The track's animated transform is GPU-accelerated regardless."
   - q: "You're using FlashList because its native paging snap is smooth, but you also want a custom spring config like `{ stiffness: 300, damping: 25 }` driving page transitions. How do you wire that up without breaking FlashList's smoothness?"
-    a: "You can't make FlashList's snap itself use a JS-driven spring — `pagingEnabled + snapToInterval + decelerationRate=\"fast\"` uses native ScrollView deceleration which has no stiffness/damping. Apply the spring to a *visual* layer on top: in `onMomentumScrollEnd`, set `animatedPage.value = withSpring(newPage, config)`. Each slide reads `animatedPage` in a `useAnimatedStyle` worklet and interpolates scale/opacity. Native snap stays smooth; the spring drives the focus transition. Avoid `useAnimatedScrollHandler` directly on FlashList — fails with `_b.call is not a function` because FlashList isn't wrapped in `createAnimatedComponent`."
+    a: "You can't make FlashList's snap itself use a JS-driven spring — `pagingEnabled + snapToInterval + decelerationRate=\\\"fast\\\"` uses native ScrollView deceleration which has no stiffness/damping. Apply the spring to a *visual* layer on top: in `onMomentumScrollEnd`, set `animatedPage.value = withSpring(newPage, config)`. Each slide reads `animatedPage` in a `useAnimatedStyle` worklet and interpolates scale/opacity. Native snap stays smooth; the spring drives the focus transition. Avoid `useAnimatedScrollHandler` directly on FlashList — fails with `_b.call is not a function` because FlashList isn't wrapped in `createAnimatedComponent`."
 ---
 
 **Topic:** expo-image virtualization regression and RN carousel trade-offs
