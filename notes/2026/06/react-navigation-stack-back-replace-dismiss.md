@@ -5,14 +5,14 @@ type: "concept"
 tags: ["react-navigation", "expo-router", "navigation-stack", "memory-leaks", "react-native"]
 summary: "Native stack screens stay mounted when defocused; back/replace/dismiss differ in both destination and teardown, which decides correctness and leaks."
 created: 2026-06-16
-updated: 2026-06-16
+updated: 2026-08-15
 source_question: "Why did the back button land on a stale loader screen, and why did switching to replace() make the home screen slow?"
-links: []
+links:
 review:
-  last_reviewed: null
-  next_review: 2026-06-16
-  step: 0
-  confidence: 0
+  last_reviewed: "2026-08-15"
+  next_review: 2026-08-16
+  step: 1
+  confidence: 1
 quiz:
   - q: "A 'go home' button uses `canGoBack() ? router.back() : router.replace(HOME)`. Sometimes it lands on home, sometimes on an unrelated screen. Why is the outcome inconsistent even though the handler never changes?"
     a: "Because router.back() is history-relative: it pops one entry and reveals whatever happens to sit beneath the current screen. The destination is decided by how the user arrived (push from home → home below; edit flow → a duplicate screen below), not by the handler. A 'go home' contract must be declarative (pop/navigate to the home route), never history-relative."
